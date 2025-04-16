@@ -29,7 +29,11 @@ def sbwau_path(resource_path: Path) -> Path:
 def test_calculate_daily_returns(sbwau_path: Path):
    asset = Asset(name="SBWAU", filepath=sbwau_path)
    returns = asset.calculate_daily_returns()
-   print(returns)
+
    assert isinstance(returns, pd.Series), "Daily returns should be a pandas Series."
-   
-  
+
+   expected_return = 220.0696 / 219.2419 - 1
+   actual_return = returns.iloc[-1]
+   assert actual_return == pytest.approx(expected_return, rel=1e-6), (
+       f"Expected return {expected_return}, but got {actual_return}"
+   )
